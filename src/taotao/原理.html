@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // vue2 响应式原理
+    const user1 = {}
+    Object.defineProperty(user1,'name',{
+      set(val){
+        console.log('设置了属性')
+        return val
+      },
+      get(){
+        console.log('获取了属性')
+        return 1
+      }
+    })
+    user1.name = '33333'
+    console.log(user1.name)
+    console.log('------------------------------------------------------------')
+    // vue3 响应式原理
+    const user = {
+      name:'小名',
+      age:'34',
+      wife:{
+        name:'小樱',
+        age:18
+      }
+    }
+    const proxyUser = new Proxy(user,{
+      // 获取属性
+      get(target,props){
+        console.log('获取了属性' , props)
+        return Reflect.get(target,props)
+      },
+      // 修改和设置属性
+      set(target,props,value){
+        console.log('设置了属性' , props,value)
+        return Reflect.set(target,props,value)
+      },
+      deleteProperty(target,props){
+        console.log('删除了属性' , props)
+        return Reflect.deleteProperty(target,props)
+      }
+    })
+    console.log(proxyUser.name)
+    proxyUser.name = '小红'
+    delete proxyUser.name
+    console.log(proxyUser)
+
+  </script>
+</body>
+</html>

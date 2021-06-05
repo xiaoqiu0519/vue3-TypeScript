@@ -2,15 +2,27 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 import { ElMessage } from 'element-plus'
 import router from "@/router/index"
-//创建axsio 赋给常量service
+const setDefaultBaseURL = ():string=>{
+  const NODE_ENV = process.env.NODE_ENV
+  let baseURL = ''
+  switch(NODE_ENV){
+    case 'development':
+      baseURL = 'http://prlegw.test-newsports.com/'
+      break;
+    case 'production':
+      baseURL = 'http://prlegw.test-newsports.com/'
+      break;
+    default:
+      baseURL = 'http://prlegw.test-newsports.com/'
+      break;
+  }
+  return baseURL
+}
 const service:AxiosInstance = axios.create({
-  baseURL:'http://prlegw.test-newsports.com/',
+  baseURL:setDefaultBaseURL(),
   timeout:100000
 });
-// 添加请求拦截器
 service.interceptors.request.use(async (config:AxiosRequestConfig):Promise<AxiosRequestConfig>=> {
-  // 在发送请求之前做些什么
-  // 设置请求头 携带token
   const token:string | null = localStorage.getItem('token')
   if(token){
     config.headers = config.headers || {}
@@ -18,10 +30,8 @@ service.interceptors.request.use(async (config:AxiosRequestConfig):Promise<Axios
   }
   return config;
 }, function (error) {
-  // 对请求错误做些什么
   return Promise.reject(error);
 });
-// 添加响应拦截器
 service.interceptors.response.use( (response:AxiosResponse):AxiosResponse =>{
   if(response.data.code === 8888){
     ElMessage.error(response.data.message);

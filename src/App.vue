@@ -1,4 +1,5 @@
 <template>
+  <TagNav></TagNav>
   <router-view/>
 </template>
 <style lang="less">

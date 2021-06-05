@@ -1,40 +1,53 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="tagnav">
+    <span :class="{nav:1,actived:activeindex === index}" 
+      v-for="(tag,index) in tagNav" :key="index"
+      @click="changeTab(index)"
+      >
+      {{tag}}
+    </span>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script lang='ts'>
+import { defineComponent, ref } from 'vue';
 export default defineComponent({
-  name: 'HelloWorld',
-  props: {
-    msg:{
-      type:Array,
-      required:false,
+  name: 'tagnav',
+  props:{
+    tagNav:{
       default(){
         return ['Matches','OutRight']
       }
-    },
+    }
   },
-});
+  setup(){
+    const activeindex = ref(0)
+    const changeTab = (index:number)=>{
+      activeindex.value = index
+    }
+    return{
+      activeindex,
+      changeTab
+    }
+  }
+})
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style lang="less" scoped>
+.tagnav{
+  height: 45px;
+  padding: 0 10px;
+  line-height: 45px;
+  color: white;
+  font-weight: 900;
+  background-image: linear-gradient(to right, #1f4064 0%, #00bfa8 181%, #00bfa8 181%);
+  .nav{
+    display: inline-block;
+    padding: 0 15px;
+    color: white;
+    cursor: pointer;
+  }
+  .actived{
+    background: #EEF1F3;
+    color: black;;
+  }
+}  
 </style>
