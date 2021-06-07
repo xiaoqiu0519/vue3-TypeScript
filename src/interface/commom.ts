@@ -18,3 +18,6 @@ export interface IfindRcMatchListParams{
   size: number,
   status: number | string | "",
 }
+export interface IfindEnumList{
+  rcEnum:string[]
+}

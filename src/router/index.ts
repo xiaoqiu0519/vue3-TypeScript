@@ -1,14 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-console.log(createWebHistory(process.env.BASE_URL))
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect:'/taotao'
+    redirect:'/login'
   },
   {
     path:'/taotao',
     name:'taotao',
-    component:()=>import('@/taotao/readonly.vue')
+    component:()=>import('@/taotao/ref_reactive.vue')
   },
   {
     path: '/login',
@@ -19,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/tablelist',
     name: 'Tablelist',
     component: () => import('@/views/tablelist/tablelist.vue')
+  },
+  {
+    path: '/matchdetail/matchid/:matchid',
+    name: 'MatchDetail',
+    component: () => import('@/views/matchdetail/detail.vue')
   }
 ]
 

@@ -22,7 +22,6 @@
 import { defineComponent, reactive ,ref, watch} from 'vue'
 import { uPattern , uPassword ,uAllnum} from '@/utils/validReg'
 import router from '@/router/index'
-// import { useStore } from 'vuex'
 import { login } from '@/api/commom'
 import { IloginParams } from '@/interface/commom'
 export default defineComponent({

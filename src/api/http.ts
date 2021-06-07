@@ -20,7 +20,7 @@ const setDefaultBaseURL = ():string=>{
 }
 const service:AxiosInstance = axios.create({
   baseURL:setDefaultBaseURL(),
-  timeout:100000
+  timeout:200000
 });
 service.interceptors.request.use(async (config:AxiosRequestConfig):Promise<AxiosRequestConfig>=> {
   const token:string | null = localStorage.getItem('token')
@@ -35,6 +35,7 @@ service.interceptors.request.use(async (config:AxiosRequestConfig):Promise<Axios
 service.interceptors.response.use( (response:AxiosResponse):AxiosResponse =>{
   if(response.data.code === 8888){
     ElMessage.error(response.data.message);
+    localStorage.removeItem("token");
     setTimeout(()=>{
       router.push('/login')
     },1500) 

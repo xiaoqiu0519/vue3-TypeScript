@@ -29,7 +29,7 @@ export default defineComponent({
     const user = reactive(obj)
     const update = () =>{
       obj.age = 23
-      obj.name = '小名'
+      user.name = '小名'
       console.log(user)
     }
     return{
