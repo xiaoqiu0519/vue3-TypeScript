@@ -20,6 +20,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/tablelist/tablelist.vue')
   },
   {
+    path: '/positionmatrix',
+    name: 'positionmatrix',
+    component: () => import('@/views/positionmatrix/index.vue')
+  },
+  {
     path: '/matchdetail/matchid/:matchid',
     name: 'MatchDetail',
     component: () => import('@/views/matchdetail/detail.vue')

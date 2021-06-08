@@ -11,13 +11,25 @@ export interface IloginParams{
   systemId:number,
 }
 export interface IfindRcMatchListParams{
-  current: number,
+  current?: number,
   matchQueryType: number,
-  matchStatus: [],
-  matchType: number,
-  size: number,
-  status: number | string | "",
+  matchStatus?: [],
+  matchType?: number,
+  size?: number,
+  status?: number | string | "",
 }
 export interface IfindEnumList{
   rcEnum:string[]
 }
+
+export interface IfindMatchRiskMatrixInfoList{
+  current?: number,
+  matchId?: number | string,
+  matchQueryType?: number,
+  matchStatus?: [],
+  matchType?: number,
+  salePeriods?: [],
+  size?: number | string,
+  sportId?: number | string
+}
+

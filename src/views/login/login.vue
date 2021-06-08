@@ -21,10 +21,12 @@
 <script lang="ts">
 import { defineComponent, reactive ,ref, watch} from 'vue'
 import { uPattern , uPassword ,uAllnum} from '@/utils/validReg'
-import router from '@/router/index'
 import { login } from '@/api/commom'
 import { IloginParams } from '@/interface/commom'
-export default defineComponent({
+import { createLoading } from '@/utils/createLoading'
+import { createMessage } from '@/utils/createMessaeg'
+import router from '@/router/index'
+export default defineComponent({ 
   name: 'App',
   setup(){
     const userinforuleForm = ref()
@@ -106,7 +108,9 @@ export default defineComponent({
             googleCode:valdcode,
             systemId:2,
           }
+          createLoading(true)
           login(params).then(res=>{
+            createLoading(false)
             if(res.code === 0){
               localStorage.setItem('token',res.data.token)
               router.push('/tablelist')

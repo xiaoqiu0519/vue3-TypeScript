@@ -31,6 +31,7 @@ import { findRcMatchList } from '@/api/tablelist'
 import { IfindRcMatchListParams } from '@/interface/commom'
 import { formatTime ,formatAmount} from '@/utils/filters'
 import router from '@/router/index'
+import { createLoading } from '@/utils/createLoading'
 export default defineComponent({
   name: 'App',
   setup(){ 
@@ -44,14 +45,17 @@ export default defineComponent({
       status: "",
     } 
     const getRcMatchList = ()=>{
+      createLoading(true)
       findRcMatchList(params).then(res=>{
+        createLoading(false)
         if(res.code === 0){
           tableData.value = res.data.records
         }
       });
     }  
     const goto=(row:any)=>{
-      router.push(`/matchdetail/matchid/${row.matchId}`)
+      // router.push(`/matchdetail/matchid/${row.matchId}`)
+      router.push('/positionmatrix')
     }
     getRcMatchList()
     return {

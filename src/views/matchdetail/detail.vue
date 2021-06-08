@@ -14,9 +14,8 @@ export default defineComponent({
   name: "",
   setup(){ 
     const route = useRoute()
-    console.log(route)
     return {
-      route
+      route,
     }
   },
 })
@@ -29,6 +28,5 @@ export default defineComponent({
     width:90%;
     margin: 0 auto;
   }
-  
 }
 </style>
