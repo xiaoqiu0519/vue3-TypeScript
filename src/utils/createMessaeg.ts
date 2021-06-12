@@ -11,6 +11,6 @@ export const createMessage = (message:string,type:messageType,timeout=2000):void
   messageMount.mount(MessageNode)
   setTimeout(()=>{
     messageMount.unmount()
-    document.body.removeChild(MessageNode)
+    MessageNode && document.body.removeChild(MessageNode)
   },timeout)
 }

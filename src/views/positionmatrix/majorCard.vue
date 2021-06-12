@@ -14,115 +14,17 @@ import majorInfo from './majorInfo.vue'
 import majorPeriod from './majorPeriod.vue'
 import majorScore from './majorScore.vue'
 export default defineComponent({
-  name: "",
-  props: {
-    majorCard: {
-      default () {
-        return {
-          majorInfo: {
-
-          },
-          majorItem: [
-            {
-              majorPeriod: [
-                {
-                  period: '1001',
-                  value: 'Full Time'
-                },
-                {
-                  period: '1001',
-                  value: 'First Half'
-                },
-                {
-                  period: '1001',
-                  value: 'Quarter 1'
-                },
-                {
-                  period: '1001',
-                  value: 'Quarter 2'
-                }
-              ],
-              majorScore: [
-                {
-                  title: 'Handicap',
-                  Periodlist: [
-                    {
-                      period: '1001',
-                      preScore: '123',
-                      score: [
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '123'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  title: 'Over/Under',
-                  Periodlist: [
-                    {
-                      period: '1001',
-                      preScore: '123',
-                      score: [
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '123'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        },
-                        {
-                          key: 10,
-                          value: '12323'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-
-        }
-      }
-    }
-  },
+  name: "majorCard",
+  props:['majorCard'],
   components: {
     majorInfo,
     majorPeriod,
     majorScore
   },
   setup(props){ 
-    // console.log(props)
-    const mes = 1
+    // console.log(props.majorCard)
     return {
-      mes  
+      // mesArr
     }
   }
 })

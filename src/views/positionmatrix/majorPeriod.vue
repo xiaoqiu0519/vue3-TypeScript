@@ -10,31 +10,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: "",
-  props: {
-    majorPeriod: {
-      default () {
-        return [
-          {
-            period: '1001',
-            value: 'Full Time'
-          },
-          {
-            period: '1001',
-            value: 'First Half'
-          },
-          {
-            period: '1001',
-            value: 'Quarter 1'
-          },
-          {
-            period: '1001',
-            value: 'Quarter 2'
-          }
-        ]
-      }
-    }
-  },
+  name: "majorPeriod",
+  props: ['majorPeriod'],
   setup(){ 
     const mes = 1
     return {

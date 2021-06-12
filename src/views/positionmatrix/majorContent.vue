@@ -18,13 +18,10 @@ interface ImajorItem{
   majorPeriod:any,
   majorScore:any[]
 }
-interface ImajorScore{
-  title:string,
-  Periodlist:any[]
-}
 interface IPeriodlist{
   period: string,
-  preScore: string,
+  preScore: number,
+  preScoreIndex:number,
   score:any[]
 }
 export default defineComponent({
@@ -34,15 +31,52 @@ export default defineComponent({
   },
   setup(){ 
     let majorList = ref<any>([])
-    const marketTypeName = {
-      '1':{
-        '1000': 'scoreinvestasian',
-        '1007': 'scoreinvestover',
-        '1005': 'scoreinvest1x2'
-      },
-      '3':{
-
-      }
+    const marketTypeName:any = {
+      1:[
+        {
+          title:'scoreinvestasian',
+          marketType:1000
+        },
+        {
+          title:'scoreinvestover',
+          marketType:1007
+        },
+        {
+          title:'scoreinvest1x2',
+          marketType:1005
+        }
+      ],
+      3:[
+        [
+          {
+          title:'Handicap',
+          marketType:3002
+          },
+          {
+            title:'Over/Under',
+            marketType:3003
+          },
+        ],
+        [
+          {
+          title:'Over/Under Home',
+          marketType:3012
+          },
+          {
+            title:'Over/Under Away',
+            marketType:3013
+          },
+        ]
+      ]
+    }
+    const marketTypeList:any = {
+      1000:[],
+      1007:[],
+      1005:[],
+      3002:[],
+      3003:[],
+      3012:[],
+      3013:[]
     }
     const formatData = (matchRiskMatrixList:any,matchParamList:any)=>{
       majorList.value = []
@@ -70,55 +104,119 @@ export default defineComponent({
         obj.majorInfo.lastCalculateTime = matchRiskMatrix.lastCalculateTime
         obj.majorInfo.marketType = matchRiskMatrix.marketRiskVectors && matchRiskMatrix.marketRiskVectors[0].marketType
         let majorPeriod: ImajorPeriod[] = []
-        let majorScore:any = []
-        let Periodlist:IPeriodlist = {
-          period: '1001',
-          preScore: '123',
-          score: [
-            {
-              key: 10,
-              value: '12323'
-            },
-            {
-              key: 10,
-              value: '123'
-            },
-            {
-              key: 10,
-              value: '12323'
-            }
-          ]
-        }
-        if(+item.sportId === 1){
-          majorScore = [
-            [
-              {title:'scoreinvestasian',Periodlist:[Periodlist]},
-              {title:'scoreinvestover',Periodlist:[Periodlist]},
-              {title:'scoreinvest1x2',Periodlist:[Periodlist]}
+        let Periodlist:IPeriodlist[] = [
+          {
+            period: '1001',
+            preScore: 14,
+            preScoreIndex:4,
+            score: [
+              {
+                key: 10,
+                value: '10'
+              },
+              {
+                key: 11,
+                value: '11'
+              },
+              {
+                key: 12,
+                value: '12'
+              },
+              {
+                key: 13,
+                value: '13'
+              },
+              {
+                key: 14,
+                value: '14'
+              }
             ]
-          ]
-        }else if(+item.sportId === 3){
-          majorScore = [
-            [
-              {title:'Handicap',Periodlist:[]},
-              {title:'Over/Under',Periodlist:[]},
-            ],
-            [
-              {title:'Over/Under Home',Periodlist:[]},
-              {title:'Over/Under Away',Periodlist:[]},
-            ],
-          ]
-        }
+          },
+          {
+            period: '1002',
+            preScore: 14,
+            preScoreIndex:4,
+            score: [
+              {
+                key: 10,
+                value: '10'
+              },
+              {
+                key: 11,
+                value: '11'
+              },
+              {
+                key: 12,
+                value: '12'
+              },
+              {
+                key: 13,
+                value: '13'
+              },
+              {
+                key: 14,
+                value: '14'
+              }
+            ]
+          }
+        ]
         item.periodList.map((list:number)=>{
           majorPeriod.push( {
             period:list,
             value:(store.state.periodName as any)[item.sportId.toString()][list.toString()]
           })
+          // for (const key in marketTypeList) {
+          //   marketTypeList[key].push({
+          //     period: list,
+          //     preScore: 11,
+          //     preScoreIndex:1,
+          //     score:[
+          //       {
+          //       key: 10,
+          //       value: '10'
+          //       },
+          //       {
+          //         key: 11,
+          //         value: '11'
+          //       },
+          //       {
+          //         key: 12,
+          //         value: '12'
+          //       },
+          //     ]
+          //   })
+          // }
         })
-        obj.majorItem.push({
-          majorPeriod:majorPeriod,
-          majorScore:majorScore
-        })
+        console.log(marketTypeList)
+        if(+item.sportId === 1){
+          obj.majorItem = [
+            {
+              majorPeriod:majorPeriod,
+              majorScore:[
+                {title:'scoreinvestasian',sportId:1,marketType:1000,periodlist:marketTypeList[1001]},
+                {title:'scoreinvestover',sportId:1,marketType:1007,periodlist:Periodlist[1007]},
+                {title:'scoreinvest1x2',sportId:1,marketType:1005,periodlist:Periodlist[1005]}
+              ]
+            }
+          ]
+        }else if(+item.sportId === 3){
+          obj.majorItem = [
+            {
+              majorPeriod:majorPeriod,
+              majorScore:[
+                {title:'Handicap',sportId:3,marketType:3002,periodlist:Periodlist[3002]},
+                {title:'Over/Under',sportId:3,marketType:3003,periodlist:Periodlist[3003]},
+              ]
+            },
+            {
+              majorPeriod:majorPeriod,
+              majorScore:[
+                {title:'Over/Under Home',sportId:3,marketType:3012,periodlist:Periodlist[3012]},
+                {title:'Over/Under Away',sportId:3,marketType:3013,periodlist:Periodlist[3013]},
+              ]
+            }
+          ]
+        }
         majorList.value.push(obj)
         //监听全局websokcet消息推送
       })
