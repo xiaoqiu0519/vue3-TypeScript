@@ -2,9 +2,7 @@ import { createApp } from 'vue';
 import Loading from '@/components/loading/loading.vue'
 
 export const createLoading = (flag:boolean):void=>{
-  const createLoadingApp = createApp(Loading,{
-    flag
-  })
+  const createLoadingApp = createApp(Loading,{flag})
   if(flag){
     const loadingNode = document.createElement('div')
     loadingNode.className='loadingNode'

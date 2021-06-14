@@ -29,6 +29,27 @@ import router from '@/router/index'
 export default defineComponent({ 
   name: 'App',
   setup(){
+
+    // const userData = [
+    //   {
+    //     name:'小三',
+    //     age:25,
+    //     cars:['奔驰','宝马']
+    //   },
+    //   {
+    //     name:'小si',
+    //     age:26,
+    //     cars:['奔驰','宝马']
+    //   }
+    // ]
+
+    // userData.map((item)=>{
+    //   console.log(item)
+    // })
+
+
+
+
     const userinforuleForm = ref()
     const validateUser = (rule:any, value:string, callback:any)=>{
       if (!value) {

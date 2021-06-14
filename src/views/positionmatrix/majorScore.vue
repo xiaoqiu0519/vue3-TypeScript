@@ -13,6 +13,9 @@ export default defineComponent({
   name: "",
   props: ['majorScore'],
   components:{periodlist},
+  setup(props){
+    // console.log(props.majorScore)
+  }
 })
 </script>
 

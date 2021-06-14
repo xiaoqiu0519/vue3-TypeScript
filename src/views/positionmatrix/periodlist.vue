@@ -1,13 +1,25 @@
 <template>
   <div class="scoreList" v-for="(item,key) in scoreArr[marketTypeTitle]" :key="key">
     <div class="scorekey">
-      <i class="chan left el-icon-arrow-left" @click="changeScore(item.key-1,'min')" v-if="key === 0 && marketTypeTitle !== 'scoreinvest1x2' && 
-          (([1007,3003,3012,3013].indexOf(marketType) !== -1 && +item.key > 0) || [1000,3002].indexOf(marketType) !== -1)"></i>
-      <input @blur="blurInput(marketTypeTitle)" :class="{preScore:+item.key === +periodlist.preScore}" type="text" v-model="scoreArrInput[marketTypeTitle]" v-if=" key ===  (scoreArr[marketTypeTitle].length - 1) / 2">
-      <span :class="{score:true,preScore:+item.key === +periodlist.preScore}" v-else>{{item.key}}</span>
-      <i class="chan right el-icon-arrow-left" @click="changeScore(item.key+1,'add')" v-if="key === scoreArr[marketTypeTitle].length - 1 && marketTypeTitle !== 'scoreinvest1x2'"></i>
+      <i class="chan left el-icon-arrow-left" 
+        @click="changeScore(item.score-1,'min')" 
+        v-if="key === 0 && marketTypeTitle !== 'scoreinvest1x2' && (([1007,3003,3012,3013].indexOf(marketType) !== -1 && +item.score > 0) || [1000,3002].indexOf(marketType) !== -1)"></i>
+
+      <input 
+        @blur="blurInput(marketTypeTitle)" 
+        :class="{preScore:(periodlist.preScore === 0 || periodlist.preScore) && +item.score === +periodlist.preScore}" 
+        type="text" 
+        v-model="scoreArrInput[marketTypeTitle]" 
+        v-if=" marketTypeTitle !='scoreinvest1x2' && key ===  (scoreArr[marketTypeTitle].length - 1) / 2">
+      
+      <span :class="{score:true,preScore:(periodlist.preScore === 0 || periodlist.preScore) && +item.score === +periodlist.preScore}" v-else>
+        {{marketTypeTitle !== 'scoreinvest1x2' ? item.score : scoreinvest1x2Name[item.score]}}
+      </span>
+      <i class="chan right el-icon-arrow-left" 
+        @click="changeScore(item.score+1,'add')" 
+        v-if="key === scoreArr[marketTypeTitle].length - 1 && marketTypeTitle !== 'scoreinvest1x2'"></i>
     </div>
-    <div :class="{scorevalue:true,prevalue:+item.key === +periodlist.preScore}">{{item.value}}</div>
+    <div :class="{scorevalue:true,prevalue:(periodlist.preScore === 0 || periodlist.preScore) && +item.score === +periodlist.preScore}">{{item.invest}}</div>
   </div>
 </template>
 
@@ -27,6 +39,11 @@ export default defineComponent({
     const marketType = toRefs(props).marketType.value
     const sportId = toRefs(props).sportId.value
     const sportLength:any = {1:3,3:5}
+    const scoreinvest1x2Name = {
+      2:"Home",
+      1:"Draw",
+      0:"Away"
+    }
     let scoreArr:any = reactive({})
     let scoreArrInput:any = reactive({})
     let itemPeriodlist = periodlist.score
@@ -34,45 +51,53 @@ export default defineComponent({
     scoreArrInput[marketTypeTitle] = periodlist.preScore
     if(+marketType === 1005){
       scoreArr[marketTypeTitle] = itemPeriodlist
+      if(preScoreIndex === null){
+        scoreArrInput[marketTypeTitle] = itemPeriodlist[1].score
+      }
     }else{
       let ArrLeft = []
-      let ArrRight = itemPeriodlist.slice(preScoreIndex,preScoreIndex + ((sportLength[sportId] +1) / 2)) 
-      if(preScoreIndex >= (sportLength[sportId] -1) / 2){ 
+      let ArrRight = []
+      if(preScoreIndex === null){
+        ArrRight = itemPeriodlist.slice(0,sportLength[sportId])
+        scoreArrInput[marketTypeTitle] = ArrRight[(sportLength[sportId] - 1) / 2].score
+      }else if(preScoreIndex >= (sportLength[sportId] -1) / 2){ 
         ArrLeft = itemPeriodlist.slice(preScoreIndex - ((sportLength[sportId] -1) / 2),preScoreIndex) 
+        ArrRight = itemPeriodlist.slice(preScoreIndex,preScoreIndex + ((sportLength[sportId] +1) / 2)) 
       }else{
+        itemPeriodlist.slice(preScoreIndex,preScoreIndex + ((sportLength[sportId] +1) / 2)) 
         switch(marketType){
           case 1000:
-            ArrLeft = [{key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value}]
+            ArrLeft = [{score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest}]
             break;
           case 3002:
             ArrLeft = preScoreIndex === 0
             ?
               [
-                {key:itemPeriodlist[0].key - 2,value:itemPeriodlist[0].value},
-                {key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value}
+                {score:itemPeriodlist[0].score - 2,invest:itemPeriodlist[0].invest},
+                {score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest}
               ]
             :
               [
-                {key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value},
-                {key:itemPeriodlist[0].key,value:itemPeriodlist[0].value}
+                {score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest},
+                {score:itemPeriodlist[0].score,invest:itemPeriodlist[0].invest}
               ]
             break;
           case 1007:
-            itemPeriodlist[0].key <= 0 
+            itemPeriodlist[0].score <= 0 
               ?ArrRight = itemPeriodlist.slice(0,3)
-              :ArrLeft = [{key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value}]
+              :ArrLeft = [{score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest}]
             break;
           case 3012:
           case 3013:
-            if(itemPeriodlist[0].key <= 0){
+            if(itemPeriodlist[0].score <= 0){
               ArrRight = itemPeriodlist.slice(0,5)
-            }else if(itemPeriodlist[0].key === 1){
-              ArrLeft = [{key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value}]
+            }else if(itemPeriodlist[0].score === 1){
+              ArrLeft = [{score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest}]
               ArrRight = itemPeriodlist.slice(0,4)    
             }else{
               ArrLeft = [
-                {key:itemPeriodlist[0].key - 2,value:itemPeriodlist[0].value},
-                {key:itemPeriodlist[0].key - 1,value:itemPeriodlist[0].value}
+                {score:itemPeriodlist[0].score - 2,invest:itemPeriodlist[0].invest},
+                {score:itemPeriodlist[0].score - 1,invest:itemPeriodlist[0].invest}
               ]
               ArrRight = itemPeriodlist.slice(0,3)
             }
@@ -84,8 +109,8 @@ export default defineComponent({
       while(diffLength){
         diffLength--
         scoreArr[marketTypeTitle] = scoreArr[marketTypeTitle].concat([{
-          key:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].key + 1,
-          value:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].value
+          key:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].score + 1,
+          value:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].invest
         }])
       }
     }
@@ -94,18 +119,18 @@ export default defineComponent({
       let curentArr = []
       let activeArr = scoreArr[marketTypeTitle]
       let lastScore = activeArr[activeArr.length-1]
-      let isInmajorScoreArr = majorScoreArr.some((list:any)=> paramsKey === list.key)
+      let isInmajorScoreArr = majorScoreArr.some((list:any)=> paramsKey === list.score)
       if(isInmajorScoreArr){
-        curentArr = majorScoreArr.filter((list:any) => paramsKey === list.key)
+        curentArr = majorScoreArr.filter((list:any) => paramsKey === list.score)
       }else{
         if(type === 'min'){
-          curentArr = paramsKey > activeArr[0].key 
-            ?[{key:lastScore.key-1,value:lastScore.value}]
-            :[{key:activeArr[0].key-1,value:activeArr[0].value}]
+          curentArr = paramsKey > activeArr[0].score 
+            ?[{score:lastScore.score-1,invest:lastScore.invest}]
+            :[{score:activeArr[0].score-1,invest:activeArr[0].invest}]
         }else{
-          curentArr = paramsKey > lastScore.key 
-            ?[{key:lastScore.key+1,value:lastScore.value}]
-            :[{key:activeArr[0].key+1,value:activeArr[0].value}]
+          curentArr = paramsKey > lastScore.score 
+            ?[{score:lastScore.score+1,invest:lastScore.invest}]
+            :[{score:activeArr[0].score+1,invest:activeArr[0].invest}]
         }
       }
       scoreArr[marketTypeTitle] = type === 'min'
@@ -113,7 +138,7 @@ export default defineComponent({
         : activeArr.slice(1).concat(curentArr)
 
       for (const key in scoreArrInput) {
-        scoreArrInput[key] = scoreArr[key][(scoreArr[key].length - 1) / 2].key
+        scoreArrInput[key] = scoreArr[key][(scoreArr[key].length - 1) / 2].score
       }
     }
     const blurInput =(title:string)=>{
@@ -126,33 +151,33 @@ export default defineComponent({
             scoreArrInput[marketTypeTitle] = (+sportLength[sportId] - 1) / 2
           }
         }
-        if(+scoreArrInput[title] <= +preScore[0].key){
+        if(+scoreArrInput[title] <= +preScore[0].score){
           for(let i = 0 ;i < sportLength[sportId];i++){
             let dd = scoreArrInput[title] - (sportLength[sportId] - 1) / 2 + i
-            if(dd <= +preScore[0].key){
-              scoreArr[marketTypeTitle].push({key:dd,value:preScore[0].value})
+            if(dd <= +preScore[0].score){
+              scoreArr[marketTypeTitle].push({score:dd,invest:preScore[0].invest})
             }else{
-              scoreArr[marketTypeTitle].push(preScore[dd- +preScore[0].key])
+              scoreArr[marketTypeTitle].push(preScore[dd- +preScore[0].score])
             }
           }
-        }else if(+scoreArrInput[title] >= +preScore[preScore.length-1].key){
+        }else if(+scoreArrInput[title] >= +preScore[preScore.length-1].score){
           for(let i = 0 ;i < sportLength[sportId];i++){
             let dd = scoreArrInput[title] - (sportLength[sportId] - 1) / 2 + i
-            if(dd <= +preScore[preScore.length-1].key){
-              scoreArr[marketTypeTitle].push(preScore[preScore.length - 1 + dd - +preScore[preScore.length-1].key])
+            if(dd <= +preScore[preScore.length-1].score){
+              scoreArr[marketTypeTitle].push(preScore[preScore.length - 1 + dd - +preScore[preScore.length-1].score])
             }else{
-              scoreArr[marketTypeTitle].push({key:dd,value:preScore[preScore.length-1].value})
+              scoreArr[marketTypeTitle].push({score:dd,invest:preScore[preScore.length-1].invest})
             }
           }
         }else{
           for(let i = 0 ;i < sportLength[sportId];i++){
             let dd = scoreArrInput[title] - (sportLength[sportId] - 1) / 2 + i
-            if(dd <= +preScore[0].key){
-              scoreArr[marketTypeTitle].push({key:dd,value:preScore[0].value})
-            }else if(dd <= +preScore[preScore.length-1].key){
-              scoreArr[marketTypeTitle].push(preScore[preScore.length - 1 + dd - +preScore[preScore.length-1].key])
+            if(dd <= +preScore[0].score){
+              scoreArr[marketTypeTitle].push({score:dd,invest:preScore[0].invest})
+            }else if(dd <= +preScore[preScore.length-1].score){
+              scoreArr[marketTypeTitle].push(preScore[preScore.length - 1 + dd - +preScore[preScore.length-1].score])
             }else{
-              scoreArr[marketTypeTitle].push({key:dd,value:preScore[preScore.length-1].value})
+              scoreArr[marketTypeTitle].push({score:dd,invest:preScore[preScore.length-1].invest})
             }
           }
         }
@@ -191,6 +216,7 @@ export default defineComponent({
       blurInput,
       scoreArrInput,
       marketTypeTitle,
+      scoreinvest1x2Name
     }
   }
 })

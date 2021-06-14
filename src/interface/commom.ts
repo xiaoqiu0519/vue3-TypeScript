@@ -28,7 +28,7 @@ export interface IfindMatchRiskMatrixInfoList{
   matchQueryType?: number,
   matchStatus?: [],
   matchType?: number,
-  salePeriods?: [],
+  salePeriods?: any[],
   size?: number | string,
   sportId?: number | string
 }
