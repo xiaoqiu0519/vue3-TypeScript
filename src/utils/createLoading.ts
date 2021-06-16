@@ -13,5 +13,4 @@ export const createLoading = (flag:boolean):void=>{
     // createLoadingApp.unmount()
     loadingNode && document.body.removeChild(loadingNode)
   }
-  
 } 

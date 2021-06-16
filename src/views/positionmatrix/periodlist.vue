@@ -14,7 +14,9 @@
       
       <span :class="{score:true,preScore:(periodlist.preScore === 0 || periodlist.preScore) && +item.score === +periodlist.preScore}" v-else>
         {{marketTypeTitle !== 'scoreinvest1x2' ? item.score : scoreinvest1x2Name[item.score]}}
-      </span>
+      </span> 
+
+
       <i class="chan right el-icon-arrow-left" 
         @click="changeScore(item.score+1,'add')" 
         v-if="key === scoreArr[marketTypeTitle].length - 1 && marketTypeTitle !== 'scoreinvest1x2'"></i>
@@ -109,8 +111,8 @@ export default defineComponent({
       while(diffLength){
         diffLength--
         scoreArr[marketTypeTitle] = scoreArr[marketTypeTitle].concat([{
-          key:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].score + 1,
-          value:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].invest
+          score:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].score + 1,
+          invest:scoreArr[marketTypeTitle][scoreArr[marketTypeTitle].length-1].invest
         }])
       }
     }
